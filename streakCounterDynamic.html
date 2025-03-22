@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nailbiter - Your Simple Streak Counter</title>
+    <meta name="description" content="Nailbiter is a simple streak counter to track your progress on any goal, habit, or challenge. Stay motivated and see how long you've been on track!">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1c1c84;
+            font-family: 'Nunito', sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            overflow: hidden;
+        }
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            font-size: 7rem;
+            margin-top: 1rem;
+            margin-bottom: 0.02rem;
+            letter-spacing: 2px;
+        }
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 400;
+            margin-top: 0.05rem;
+            margin-bottom: 1rem;
+            text-transform: none;
+            color: #a9a9a9;
+        }
+        .highlight {
+            background: linear-gradient(135deg, #bbb 25%, transparent 25%) repeat;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 4px 4px;
+        }
+        p {
+            font-size: 1.8rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        #timer {
+            font-size: 3.5rem;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+        #modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #modalContent {
+            background: white;
+            color: black;
+            padding: 50px;
+            border-radius: 10px;
+            text-align: center;
+            width: 450px;
+        }
+        .modalHeading {
+            color:black;
+        }
+        button {
+            background-color: #28A745;
+            color: white;
+            padding: 20px 20px;
+            font-size: 1.6rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 30px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        button:hover {
+            transform: scale(1.08);
+        }
+        input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 15px;
+            margin-bottom: 25px;
+            width: 80%;
+            font-size: 1rem;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        .footer {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.9rem;
+        }
+        .footer a {
+            color: white;
+            text-decoration: underline;
+        }
+    /* Media Queries for Mobile Devices */
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 4rem;
+        }
+        h2 {
+            font-size: 1.8rem;
+        }
+        p {
+            font-size: 1.5rem;
+        }
+        #timer {
+            font-size: 2.5rem;
+        }
+        button {
+            font-size: 1.4rem;
+            padding: 15px 15px;
+        }
+        input {
+            font-size: 1.2rem;
+        }
+        label {
+            font-size: 1.2rem;
+        }
+        #modalContent {
+            width: 80%;
+            padding: 30px;
+        }
+        .footer {
+            position: fixed;
+            bottom: 8px;
+            right: 8px;
+            font-size: 0.7rem;
+        }
+    }
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 3rem;
+        }
+        h2 {
+            font-size: 1.6rem;
+        }
+        p {
+            font-size: 1.3rem;
+        }
+        #timer {
+            font-size: 2rem;
+        }
+        button {
+            font-size: 1.2rem;
+            padding: 12px 12px;
+        }
+        input {
+            font-size: 1.1rem;
+        }
+        label {
+            font-size: 1.1rem;
+        }
+        #modalContent {
+            width: 80%;
+            padding: 20px;
+        }
+        .footer {
+            position: fixed;
+            bottom: 8px;
+            right: 8px;
+            font-size: 0.7rem;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <h1>NAIL<span class="highlight">BITER</span></h1>
+        <h2>Your Simple Streak Counter</h2>
+        <p id="tagline" style="display: none;"></p>
+        <div id="timer" style="display: none;">Loading...</div>
+        <button id="getStartedButton" style="display: none;">Get Started!</button>
+    </div>
+
+    <div id="modal" style="display: none;">
+        <div id="modalContent">
+            <h2 class="modalHeading">Start Tracking Your Streak</h2>
+            <label>What is your streak about?</label>
+            <input type="text" id="streakTaglineInput">
+            <label>When did you start your streak?</label>
+            <input type="datetime-local" id="streakStartInput">
+            <button onclick="saveStreakData()">Go!</button>
+        </div>
+    </div>
+
+    <div class="footer">By <a href="https://hinternesch.com" target="_blank">Nicolas Hinternesch</a></div>
+
+    <script>
+        // Disable scrolling
+        document.body.style.overflow = 'hidden';
+
+        function saveStreakData() {
+            const streakTagline = document.getElementById('streakTaglineInput').value;
+            const streakStart = document.getElementById('streakStartInput').value;
+            if (streakTagline && streakStart) {
+                document.cookie = `streakTagline=${streakTagline}; path=/`;
+                document.cookie = `streakStart=${streakStart}; path=/`;
+                document.getElementById('modal').style.display = 'none';
+                location.reload();
+            }
+        }
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        window.onload = function() {
+            const tagline = getCookie('streakTagline');
+            const start = getCookie('streakStart');
+
+            if (tagline && start) {
+                document.getElementById('tagline').style.display = 'inline';
+                document.getElementById('tagline').innerText = tagline;
+                const startTime = new Date(start).getTime();
+
+                setInterval(() => {
+                    const now = new Date().getTime();
+                    const elapsed = now - startTime;
+
+                    const days = Math.floor(elapsed / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((elapsed % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
+
+                    document.getElementById('timer').style.display = 'inline';
+                    document.getElementById('timer').innerText = `${days} Days\n${hours} Hours\n${minutes} Minutes\n${seconds} Seconds`;
+                }, 1000);
+            } else {
+                document.getElementById('getStartedButton').style.display = 'block';
+                document.getElementById('getStartedButton').onclick = function() {
+                    document.getElementById('modal').style.display = 'flex';
+                };
+            }
+        }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Nailbiter - Simple Streak Counter",
+      "description": "Track your habits, goals, and progress with this simple streak counter tool.",
+      "url": "https://streakcounter.hinternesch.com",
+      "mainEntityOfPage": "https://streakcounter.hinternesch.com"
+    }
+</script>
+
+</body>
+</html>
