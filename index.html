@@ -79,6 +79,16 @@
         .modalHeading {
             color:black;
         }
+        .closeButtonWrap {
+        text-align: right;
+        margin-top: -15px;
+        margin-bottom: 0px;
+        }
+        .closeButton {
+        font-size: 1.2rem;
+        color: lightgray;
+        cursor: pointer;
+        }
         button {
             background-color: #28A745;
             color: white;
@@ -214,6 +224,7 @@
 
     <div id="modal" style="display: none;">
         <div id="modalContent">
+            <p class="closeButtonWrap"><span class="closeButton" onclick="closeModal()">×</span></p>
             <h2 class="modalHeading">Start Tracking Your Streak</h2>
             <label>What is your streak about?</label>
             <input type="text" id="streakTaglineInput">
@@ -247,6 +258,10 @@
 
             // Reload the page
             location.reload();
+        }
+        
+        function closeModal() {
+        document.getElementById("modal").style.display = "none";
         }
 
         function getCookie(name) {
