@@ -125,6 +125,12 @@
             color: white;
             text-decoration: underline;
         }
+        #reset {
+            font-size: 0.9rem;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-top: 1rem
+        }
     /* Media Queries for Mobile Devices */
     @media (max-width: 768px) {
         h1 {
@@ -202,6 +208,7 @@
         <h2>Your Simple Streak Counter</h2>
         <p id="tagline" style="display: none;"></p>
         <div id="timer" style="display: none;">Loading...</div>
+        <p id="reset" style="display: none;" onclick="reset()">Reset</p>
         <button id="getStartedButton" style="display: none;">Get Started!</button>
     </div>
 
@@ -232,6 +239,15 @@
                 location.reload();
             }
         }
+        
+        function reset() {
+            // Clear cookies
+            document.cookie = "streakStart=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "streakTagline=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+            // Reload the page
+            location.reload();
+        }
 
         function getCookie(name) {
             const value = `; ${document.cookie}`;
@@ -246,6 +262,7 @@
             if (tagline && start) {
                 document.getElementById('tagline').style.display = 'inline';
                 document.getElementById('tagline').innerText = tagline;
+                
                 const startTime = new Date(start).getTime();
 
                 setInterval(() => {
@@ -259,6 +276,7 @@
 
                     document.getElementById('timer').style.display = 'inline';
                     document.getElementById('timer').innerText = `${days} Days\n${hours} Hours\n${minutes} Minutes\n${seconds} Seconds`;
+                    document.getElementById('reset').style.display = 'inline';
                 }, 1000);
             } else {
                 document.getElementById('getStartedButton').style.display = 'block';
