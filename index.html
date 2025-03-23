@@ -233,8 +233,9 @@
             const streakTagline = document.getElementById('streakTaglineInput').value;
             const streakStart = document.getElementById('streakStartInput').value;
             if (streakTagline && streakStart) {
-                document.cookie = `streakTagline=${streakTagline}; path=/`;
-                document.cookie = `streakStart=${streakStart}; path=/`;
+                const maxAge = 60 * 60 * 24 * 365 * 68;
+                document.cookie = `streakTagline=${streakTagline}; path=/; SameSite=Strict; max-age=${maxAge}`;
+                document.cookie = `streakStart=${streakStart}; path=/; SameSite=Strict; max-age=${maxAge}`;
                 document.getElementById('modal').style.display = 'none';
                 location.reload();
             }
